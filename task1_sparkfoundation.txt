@@ -1,0 +1,154 @@
+name : supriya paratwar
+task : Prediction using supervised ML
+       predict the percentage of students based on number of study hours.
+       
+       
+#####################################################################################    
+# ## importing nesessary libraries 
+
+# In[1]:
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+
+
+# In[2]:
+
+
+#reading data
+data=pd.read_csv("C:/Users/Nageshwar Paratwar/Desktop/z/student data.csv")
+data.head()
+
+
+# In[3]:
+
+
+data.isnull().sum() 
+
+
+# In[4]:
+
+
+data.shape
+
+
+# In[5]:
+
+
+data.info()
+
+
+# In[6]:
+
+
+#let us plot the data
+
+data.plot(x="Hours",y="score",style="o")       #graph
+plt.title("hours vr percentage score")     #title
+plt.xlabel("Hours")
+plt.ylabel("percentage score")
+plt.show()
+
+
+# #from above data we can see that there is linear relationship between the variables.
+
+# ## preparing data 
+
+# In[7]:
+
+
+X = data.iloc[:, :-1].values  
+y = data.iloc[:, 1].values  
+
+
+# In[8]:
+
+
+#split data into training and testing part
+
+from sklearn.model_selection import train_test_split  
+X_train, X_test, y_train, y_test = train_test_split(X, y,test_size=0.2, random_state=0) 
+
+
+# ## Training the algorithm
+
+# In[9]:
+
+
+#defining the model
+
+from sklearn.linear_model import LinearRegression  
+regressor = LinearRegression()  
+regressor.fit(X_train, y_train) 
+
+
+# In[10]:
+
+
+#plotting regression line
+line = regressor.coef_*X+regressor.intercept_
+
+plt.scatter(X, y)
+plt.plot(X, line);
+
+
+# ## predictions
+
+# In[11]:
+
+
+print(X_test) # Testing data - In Hours
+y_pred = regressor.predict(X_test) # Predicting the scores
+
+
+# In[12]:
+
+
+#comparing actual and predicted values
+
+df = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred})  
+df
+
+
+# In[13]:
+
+
+#our task was to predict percenrage of students based on 9.5 hours of study
+
+prediction=regressor.predict([[9.25]])
+print("predicted value is ",prediction)
+
+
+# ## evaluation of model
+
+# In[14]:
+
+
+from sklearn.metrics import r2_score
+
+
+# In[15]:
+
+
+r2_score(y_test,y_pred)
+
+
+# In[16]:
+
+
+from sklearn import metrics  
+print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred)) 
+
+
+# which tells us that the accuracy of our model is 82%
+
+# In[ ]:
+
+
+
+
